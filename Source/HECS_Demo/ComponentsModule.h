@@ -6,9 +6,9 @@
 #include "HECSModuleBase.h"
 #include "ComponentsModule.generated.h"
 
-struct Transform{};
-struct TestStruct1{};
-struct TestStruct2{};
+struct Test1{};
+struct Test2{};
+struct Test3{};
 
 /**
  * This class is for component registration

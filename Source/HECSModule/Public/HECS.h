@@ -4,6 +4,9 @@
 
 namespace HECS
 {
+	/*
+	 * Generates an ID for each new type passed in
+	 */
 	class IDGenerator
 	{
 		static unsigned Identifier()
@@ -21,13 +24,9 @@ namespace HECS
 		}
 	};
 
-	/*struct Index
-	{
-		unsigned Entity;
-		unsigned ComponentIndex;
-		unsigned Next;
-	};*/
-
+	/* 
+	 * Wrapper around component to confirm component owner
+	 */
 	template <class T>
 	struct ComponentIndex
 	{
@@ -48,7 +47,7 @@ namespace HECS
 				SparseArray[i] = UINT_MAX;
 			}
 		};
-
+		
 		bool Has(unsigned entity)
 		{
 			return
@@ -94,14 +93,30 @@ namespace HECS
 
 		// Register a component to the system
 		template <class T>
-		void Register();
+		void Register()
+		{
+			unsigned componentId = IDGenerator::GetID<T>();
+			ComponentPools.push_back(std::make_unique<ComponentPool<T>>());
+			
+			UE_LOG(LogTemp, Warning, TEXT("Component registered with ID %u"), componentId)
+		}
+
+		template <class T>
+		void Add(unsigned entity, T value = T())
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Adding Component %u to Entity %u"), IDGenerator::GetID<T>(), entity)
+			
+			ComponentPool<T>* componentPool = static_cast<ComponentPool<T>*>(ComponentPools[IDGenerator::GetID<T>()].get());
+			componentPool->Add(entity, value);
+		}
 
 		// Create a new entity, return it's ID
-		unsigned Entity();
+		unsigned Entity()
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Entity created with ID %u"), NumEntities)
 
-		// Add a component to an entity
-		//template <class T>
-		//void Add(unsigned int entity, T value);
+			return NumEntities++;
+		}
 
 	private:
 		unsigned NumEntities;
@@ -109,13 +124,4 @@ namespace HECS
 		std::vector<std::unique_ptr<ISparseSet>> ComponentPools;
 	};
 
-	template <class T>
-	void World::Register()
-	{
-		unsigned componentId = IDGenerator::GetID<T>();
-		//ComponentPools.resize(componentId + 1);
-		//ComponentPools[componentId] = std::make_unique<ComponentPool<T>>();
-		ComponentPools.push_back(std::make_unique<ComponentPool<T>>());
-		UE_LOG(LogTemp, Warning, TEXT("Component registered with ID %u"), componentId)
-	}
 }
