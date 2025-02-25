@@ -5,28 +5,18 @@
 
 void UComponentsModule::Initialise(HECS::World* ecs)
 {
-	/*ecs->Register<Test0>();
-	ecs->Register<Test1>();
-	ecs->Register<Test2>();
-
-	unsigned entity0 = ecs->Entity();
-	unsigned entity1 = ecs->Entity();
-	unsigned entity2 = ecs->Entity();
-
-	ecs->Add<Test1>(entity0); // 0 1
-	
-	ecs->Has<Test1>(entity0); // 1
-	ecs->Has<Test0>(entity0); // 0
-	
-	ecs->Add<Test0>(entity0); // 0 0
-	
-	ecs->Has<Test0>(entity0); // 1
-	
-	ecs->Add<Test2>(entity2); // 2 2
-	ecs->Add<Test0>(entity1); // 0 1
-	ecs->Add<Test2>(entity0); // 2 0
-	ecs->Add<Test1>(entity1); // 1 1
-	ecs->Add<Test1>(entity2); // 1 2*/
-
 	ecs->Register<Actor>();
+	ecs->Register<StaticMeshComponent>();
+	ecs->Register<Light>();
+	ecs->Register<OscillateLight>();
+	ecs->Register<SpinLight>();
+	ecs->Register<CosX>();
+	ecs->Register<CosY>();
+	ecs->Register<CosZ>();
+	ecs->Register<SinX>();
+	ecs->Register<SinY>();
+	ecs->Register<SinZ>();
+	ecs->Register<LinearX>();
+	ecs->Register<LinearY>();
+	ecs->Register<LinearZ>();
 }

@@ -28,6 +28,7 @@ namespace HECS
 	
 	class ISparseSet
 	{
+	public:
 		virtual bool Has(unsigned entity) = 0;
 	};
 
@@ -53,11 +54,16 @@ namespace HECS
 
 		T& Lookup(unsigned entity)
 		{
-			return ComponentPackedArray[SparseArray[entity]].Component;
+			return ComponentPackedArray[SparseArray[entity]];
 		}
 
 		void Add(unsigned entity, T value)
 		{
+			/*if(Has(entity))
+			{
+				return;
+			}*/
+			
 			SparseArray[entity] = NumComponents++;
 			EntityPackedArray[SparseArray[entity]] = entity;
 			ComponentPackedArray[SparseArray[entity]] = value;
@@ -146,6 +152,13 @@ namespace HECS
 		}
 
 		template <class T>
+		T& Get(unsigned entity)
+		{
+			ComponentPool<T>* componentPool = GetComponentPool<T>();
+			return componentPool->Lookup(entity);
+		}
+
+		template <class T>
 		T* GetAll()
 		{
 			ComponentPool<T>* componentPool = GetComponentPool<T>();
@@ -158,6 +171,11 @@ namespace HECS
 			UE_LOG(LogTemp, Warning, TEXT("Entity created with ID %u"), NumEntities)
 
 			return NumEntities++;
+		}
+
+		unsigned GetNumEntities() const
+		{
+			return NumEntities;
 		}
 		
 		template <class T>
@@ -173,33 +191,33 @@ namespace HECS
 		std::vector<std::unique_ptr<ISparseSet>> ComponentPools;
 	};
 
+	/*
+	 * Scene view lets you filter out by entities which actually have the
+	 * components you are interested in.
+	 */
 	/*template <class ...Ts>
 	class SceneView
 	{
 	public:
 		// Fill component pools list based on type arguments
 		SceneView(World* ecs) : ECS(ecs)
-		{
-			(AddComponentPool<Ts>(),...);
-		}
-
-	private:
-		// Get component pools we are interested in
-		template <class T>
-		void AddComponentPool()
-		{
-			viewPools[NumPools++] = ECS->GetComponentPool<T>();
-		}
-
-	private:
-		World* ECS = nullptr;
+		{}
 		
-		unsigned NumPools = 0;
-		ISparseSet* viewPools[sizeof...(Ts)];
+		World* ECS = nullptr;
 
 		struct Iterator
 		{
-			Iterator() {}
+			Iterator(World* ecs, unsigned entity)
+				: ECS(ecs), Entity(entity)
+			{
+				(AddComponentPool<Ts>(),...);
+			}
+
+			template <class T>
+			void AddComponentPool()
+			{
+				ViewPools[NumPools++] = ECS->GetComponentPool<T>();
+			}
 
 			unsigned operator*() const
 			{
@@ -209,7 +227,7 @@ namespace HECS
 	
 			bool operator==(const Iterator& other) const
 			{
-				return Entity = other.Entity;
+				return Entity == other.Entity;
 			}
 
 			bool operator!=(const Iterator& other) const
@@ -217,41 +235,45 @@ namespace HECS
 				return Entity != other.Entity;
 			}
 
-			// Iterating through components
 			Iterator& operator++()
 			{
-				bool IsValid = true;
-				do
+				for(; Entity < ECS->GetNumEntities(); Entity++)
 				{
-					// Update entity by indexing next position in sparse array
-					Entity = viewPools[0];
-					
-					for(unsigned i = 1; i < NumPools; i++)
+					if(IsEntityValid(Entity))
 					{
-						if(!viewPools[i]->Has(Entity))
-						{
-							IsValid = false;
-							break;
-						}
+						return *this;
 					}
 				}
-				// Re-run whilst entity does not exist across all component pools
-				while()
+				return *this;
 			}
 
+			bool IsEntityValid(unsigned entity)
+			{
+				for(unsigned i = 0; i < NumPools; i++)
+				{
+					if(!ViewPools[i]->Has(entity))
+					{
+						return false;
+					}
+				}
+				return true;
+			}
+
+			World* ECS;
+			ISparseSet* ViewPools[sizeof...(Ts)];
+
 			unsigned Entity;
-			unsigned Index;
 			unsigned NumPools;
 		};
 
 		const Iterator begin() const
 		{
-			// Give an iterator to the beginning of this view
+			return ++Iterator(ECS, 0);
 		}
 
 		const Iterator end() const
 		{
-			// Give an iterator to the end of this view 
+			return Iterator(ECS, 1);
 		}
 	};*/
 }

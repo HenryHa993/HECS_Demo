@@ -23,7 +23,15 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	void TestSystem(HECS::World* ecs, float deltaTime);
+	void CosXSystem(float deltaTime);
+	void CosYSystem(float deltaTime);
+	void CosZSystem(float deltaTime);
+	void SinXSystem(float deltaTime);
+	void SinYSystem(float deltaTime);
+	void SinZSystem(float deltaTime);
+	void LinearXSystem(float deltaTime);
+	void LinearYSystem(float deltaTime);
+	void LinearZSystem(float deltaTime);
 
 private:
 	HECS::World* ECS;
