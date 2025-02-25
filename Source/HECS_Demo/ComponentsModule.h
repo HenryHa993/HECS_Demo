@@ -6,9 +6,13 @@
 #include "HECSModuleBase.h"
 #include "ComponentsModule.generated.h"
 
+/*struct Test0{};
 struct Test1{};
-struct Test2{};
-struct Test3{};
+struct Test2{};*/
+struct Actor
+{
+	AActor* Value;
+};
 
 /**
  * This class is for component registration

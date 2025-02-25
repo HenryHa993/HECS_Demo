@@ -1,5 +1,7 @@
 #pragma once
 
+#include <sstream>
+
 #define MAX_ENTITIES 1000
 
 namespace HECS
@@ -66,6 +68,9 @@ namespace HECS
 			SparseArray[entity] = NumComponents++;
 			PackedArray[SparseArray[entity]].Entity = entity;
 			PackedArray[SparseArray[entity]].Component = value;
+
+			FString entityStr(EntitiesToString().c_str());
+			UE_LOG(LogTemp, Warning, TEXT("Entities in Component Pool %u : %s"), IDGenerator::GetID<T>(), *entityStr)
 		}
 
 		void Remove(unsigned entity)
@@ -77,6 +82,18 @@ namespace HECS
 			
 			SparseArray[componentIndex.Entity] = index;
 			SparseArray[entity] = UINT_MAX;
+		}
+
+		std::string EntitiesToString()
+		{
+			std::stringstream string;
+			string << "[ ";
+			for(unsigned i = 0; i < NumComponents; i++)
+			{
+				string << PackedArray[i].Entity << " ";
+			}
+			string << "]";
+			return string.str();
 		}
 		
 		unsigned NumComponents;
@@ -102,11 +119,22 @@ namespace HECS
 		}
 
 		template <class T>
+		bool Has(unsigned entity)
+		{
+			ComponentPool<T>* componentPool = GetComponentPool<T>();
+			bool hasComponent = componentPool->Has(entity);
+
+			UE_LOG(LogTemp, Warning, TEXT("Component Pool %u has Entity %u : %u"),IDGenerator::GetID<T>(),entity, hasComponent)
+			
+			return hasComponent;
+		}
+
+		template <class T>
 		void Add(unsigned entity, T value = T())
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Adding Component %u to Entity %u"), IDGenerator::GetID<T>(), entity)
 			
-			ComponentPool<T>* componentPool = static_cast<ComponentPool<T>*>(ComponentPools[IDGenerator::GetID<T>()].get());
+			ComponentPool<T>* componentPool = GetComponentPool<T>();
 			componentPool->Add(entity, value);
 		}
 
@@ -116,6 +144,14 @@ namespace HECS
 			UE_LOG(LogTemp, Warning, TEXT("Entity created with ID %u"), NumEntities)
 
 			return NumEntities++;
+		}
+
+	private:
+		template <class T>
+		ComponentPool<T>* GetComponentPool()
+		{
+			ComponentPool<T>* componentPool = static_cast<ComponentPool<T>*>(ComponentPools[IDGenerator::GetID<T>()].get());
+			return componentPool;
 		}
 
 	private:
