@@ -25,18 +25,11 @@ namespace HECS
 			return value;
 		}
 	};
-
-	/* 
-	 * Wrapper around component to confirm component owner
-	 */
-	template <class T>
-	struct ComponentIndex
-	{
-		unsigned Entity;
-		T Component;
-	};
 	
-	class ISparseSet{};
+	class ISparseSet
+	{
+		virtual bool Has(unsigned entity) = 0;
+	};
 
 	template <class T>
 	class ComponentPool : public ISparseSet
@@ -50,47 +43,59 @@ namespace HECS
 			}
 		};
 		
-		bool Has(unsigned entity)
+		bool Has(unsigned entity) override
 		{
 			return
 				SparseArray[entity] != UINT_MAX
 				&&
-				PackedArray[SparseArray[entity]].Entity == entity;
+				EntityPackedArray[SparseArray[entity]] == entity;
 		}
 
 		T& Lookup(unsigned entity)
 		{
-			return PackedArray[SparseArray[entity]].Component;
+			return ComponentPackedArray[SparseArray[entity]].Component;
 		}
 
 		void Add(unsigned entity, T value)
 		{
 			SparseArray[entity] = NumComponents++;
-			PackedArray[SparseArray[entity]].Entity = entity;
-			PackedArray[SparseArray[entity]].Component = value;
+			EntityPackedArray[SparseArray[entity]] = entity;
+			ComponentPackedArray[SparseArray[entity]] = value;
 
-			FString entityStr(EntitiesToString().c_str());
+			FString entityStr(EntityArrayToString().c_str());
 			UE_LOG(LogTemp, Warning, TEXT("Entities in Component Pool %u : %s"), IDGenerator::GetID<T>(), *entityStr)
+		}
+
+		T* GetComponents()
+		{
+			return ComponentPackedArray;
 		}
 
 		void Remove(unsigned entity)
 		{
+			// Get packed array index of component being removed
 			unsigned index = SparseArray[entity];
+
+			NumComponents--;
+
+			// Swap component and entity with the last element in array
+			T& component = ComponentPackedArray[index];
+			component = ComponentPackedArray[NumComponents];
 			
-			ComponentIndex<T>& componentIndex = PackedArray[index];
-			componentIndex = PackedArray[--NumComponents];
+			unsigned& entityAddress = EntityPackedArray[index];
+			entityAddress = EntityPackedArray[NumComponents];
 			
-			SparseArray[componentIndex.Entity] = index;
+			SparseArray[entityAddress] = index;
 			SparseArray[entity] = UINT_MAX;
 		}
 
-		std::string EntitiesToString()
+		std::string EntityArrayToString()
 		{
 			std::stringstream string;
 			string << "[ ";
 			for(unsigned i = 0; i < NumComponents; i++)
 			{
-				string << PackedArray[i].Entity << " ";
+				string << EntityPackedArray[i] << " ";
 			}
 			string << "]";
 			return string.str();
@@ -99,7 +104,9 @@ namespace HECS
 		unsigned NumComponents;
 		
 		unsigned SparseArray[MAX_ENTITIES];
-		ComponentIndex<T> PackedArray[MAX_ENTITIES];
+		unsigned EntityPackedArray[MAX_ENTITIES];
+		T ComponentPackedArray[MAX_ENTITIES];
+		
 	};
 	
 	// Manages entities, components and systems
@@ -138,6 +145,13 @@ namespace HECS
 			componentPool->Add(entity, value);
 		}
 
+		template <class T>
+		T* GetAll()
+		{
+			ComponentPool<T>* componentPool = GetComponentPool<T>();
+			return componentPool->GetComponents();
+		}
+
 		// Create a new entity, return it's ID
 		unsigned Entity()
 		{
@@ -145,8 +159,7 @@ namespace HECS
 
 			return NumEntities++;
 		}
-
-	private:
+		
 		template <class T>
 		ComponentPool<T>* GetComponentPool()
 		{
@@ -160,4 +173,85 @@ namespace HECS
 		std::vector<std::unique_ptr<ISparseSet>> ComponentPools;
 	};
 
+	/*template <class ...Ts>
+	class SceneView
+	{
+	public:
+		// Fill component pools list based on type arguments
+		SceneView(World* ecs) : ECS(ecs)
+		{
+			(AddComponentPool<Ts>(),...);
+		}
+
+	private:
+		// Get component pools we are interested in
+		template <class T>
+		void AddComponentPool()
+		{
+			viewPools[NumPools++] = ECS->GetComponentPool<T>();
+		}
+
+	private:
+		World* ECS = nullptr;
+		
+		unsigned NumPools = 0;
+		ISparseSet* viewPools[sizeof...(Ts)];
+
+		struct Iterator
+		{
+			Iterator() {}
+
+			unsigned operator*() const
+			{
+				// give back the entityID we're currently at
+				return Entity;
+			}
+	
+			bool operator==(const Iterator& other) const
+			{
+				return Entity = other.Entity;
+			}
+
+			bool operator!=(const Iterator& other) const
+			{
+				return Entity != other.Entity;
+			}
+
+			// Iterating through components
+			Iterator& operator++()
+			{
+				bool IsValid = true;
+				do
+				{
+					// Update entity by indexing next position in sparse array
+					Entity = viewPools[0];
+					
+					for(unsigned i = 1; i < NumPools; i++)
+					{
+						if(!viewPools[i]->Has(Entity))
+						{
+							IsValid = false;
+							break;
+						}
+					}
+				}
+				// Re-run whilst entity does not exist across all component pools
+				while()
+			}
+
+			unsigned Entity;
+			unsigned Index;
+			unsigned NumPools;
+		};
+
+		const Iterator begin() const
+		{
+			// Give an iterator to the beginning of this view
+		}
+
+		const Iterator end() const
+		{
+			// Give an iterator to the end of this view 
+		}
+	};*/
 }

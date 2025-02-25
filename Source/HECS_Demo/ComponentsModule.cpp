@@ -18,15 +18,15 @@ void UComponentsModule::Initialise(HECS::World* ecs)
 	ecs->Has<Test1>(entity0); // 1
 	ecs->Has<Test0>(entity0); // 0
 	
-	ecs->Add<Test0>(entity0); // 0 1
+	ecs->Add<Test0>(entity0); // 0 0
 	
 	ecs->Has<Test0>(entity0); // 1
 	
 	ecs->Add<Test2>(entity2); // 2 2
 	ecs->Add<Test0>(entity1); // 0 1
 	ecs->Add<Test2>(entity0); // 2 0
-	ecs->Add<Test1>(entity1); // 0 1
-	ecs->Add<Test1>(entity2); // 0 1*/
+	ecs->Add<Test1>(entity1); // 1 1
+	ecs->Add<Test1>(entity2); // 1 2*/
 
 	ecs->Register<Actor>();
 }
