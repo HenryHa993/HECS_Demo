@@ -27,6 +27,7 @@ void ASystemsManager::BeginPlay()
 // Called every frame
 void ASystemsManager::Tick(float DeltaTime)
 {
+	DimSystem(DeltaTime);
 	CosXSystem(DeltaTime);
 	CosYSystem(DeltaTime);
 	CosZSystem(DeltaTime);
@@ -37,6 +38,24 @@ void ASystemsManager::Tick(float DeltaTime)
 	LinearYSystem(DeltaTime);
 	LinearZSystem(DeltaTime);
 	Super::Tick(DeltaTime);
+}
+
+void ASystemsManager::DimSystem(float deltaTime)
+{
+	for(unsigned entity = 0; entity < ECS->GetNumEntities(); entity++)
+	{
+		if(!ECS->Has<Light>(entity) || !ECS->Has<Dim>(entity))
+		{
+			continue;
+		}
+
+		Light& lightType = ECS->Get<Light>(entity);
+		
+		UPointLightComponent* light = lightType.Value;
+		UE_LOG(LogTemp, Warning, TEXT("DIMMING %f"), light->Intensity)
+
+		light->SetIntensity(light->Intensity - deltaTime * 100.0f);
+	}
 }
 
 void ASystemsManager::CosXSystem(float deltaTime)

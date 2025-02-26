@@ -32,6 +32,7 @@ void ATestEntity::BeginPlay()
 void ATestEntity::Initialise(HECS::World* ecs)
 {
 	EntityID = ecs->Entity();
+	UE_LOG(LogTemp, Warning, TEXT("Entity created with ID %u"), EntityID)
 	ecs->Add<StaticMeshComponent>(EntityID,{StaticMesh});
 	ecs->Add<Light>(EntityID,{Pointlight});
 	ecs->Add<CosX>(EntityID,{Radius});

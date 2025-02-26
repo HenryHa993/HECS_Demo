@@ -29,6 +29,8 @@ struct OscillateLight{};
 
 struct SpinLight{};
 
+struct Dim{};
+
 struct CosX
 {
 	float Radius;

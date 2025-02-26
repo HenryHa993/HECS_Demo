@@ -137,7 +137,7 @@ namespace HECS
 			ComponentPool<T>* componentPool = GetComponentPool<T>();
 			bool hasComponent = componentPool->Has(entity);
 
-			UE_LOG(LogTemp, Warning, TEXT("Component Pool %u has Entity %u : %u"),IDGenerator::GetID<T>(),entity, hasComponent)
+			//UE_LOG(LogTemp, Warning, TEXT("Component Pool %u has Entity %u : %u"),IDGenerator::GetID<T>(),entity, hasComponent)
 			
 			return hasComponent;
 		}
@@ -168,7 +168,7 @@ namespace HECS
 		// Create a new entity, return it's ID
 		unsigned Entity()
 		{
-			UE_LOG(LogTemp, Warning, TEXT("Entity created with ID %u"), NumEntities)
+			//UE_LOG(LogTemp, Warning, TEXT("Entity created with ID %u"), NumEntities)
 
 			return NumEntities++;
 		}

@@ -23,6 +23,7 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	void DimSystem(float deltaTime);
 	void CosXSystem(float deltaTime);
 	void CosYSystem(float deltaTime);
 	void CosZSystem(float deltaTime);

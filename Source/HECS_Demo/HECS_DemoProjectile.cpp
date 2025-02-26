@@ -1,8 +1,13 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "HECS_DemoProjectile.h"
+
+#include "ComponentsModule.h"
+#include "HECSSubsystem.h"
+#include "TestEntity.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 AHECS_DemoProjectile::AHECS_DemoProjectile() 
 {
@@ -34,10 +39,16 @@ AHECS_DemoProjectile::AHECS_DemoProjectile()
 void AHECS_DemoProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
 	// Only add impulse and destroy projectile if we hit a physics
-	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr) && OtherComp->IsSimulatingPhysics())
+	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
 	{
-		OtherComp->AddImpulseAtLocation(GetVelocity() * 100.0f, GetActorLocation());
-
-		Destroy();
+		ATestEntity* entity = Cast<ATestEntity>(OtherActor);
+		if(entity == nullptr)
+		{
+			return;
+		}
+		UGameInstance* gameInstance = UGameplayStatics::GetGameInstance(GetWorld());
+		UHECSSubsystem* hecsSubsystem = gameInstance->GetSubsystem<UHECSSubsystem>();
+		HECS::World* ecs = hecsSubsystem->GetECSWorld();
+		ecs->Add<Dim>(entity->EntityID);
 	}
 }
