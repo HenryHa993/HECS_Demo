@@ -59,10 +59,10 @@ namespace HECS
 
 		void Add(unsigned entity, T value)
 		{
-			/*if(Has(entity))
+			if(Has(entity))
 			{
 				return;
-			}*/
+			}
 			
 			SparseArray[entity] = NumComponents++;
 			EntityPackedArray[SparseArray[entity]] = entity;
@@ -182,6 +182,7 @@ namespace HECS
 		ComponentPool<T>* GetComponentPool()
 		{
 			ComponentPool<T>* componentPool = static_cast<ComponentPool<T>*>(ComponentPools[IDGenerator::GetID<T>()].get());
+			UE_LOG(LogTemp, Warning, TEXT("Getting component pool..."))
 			return componentPool;
 		}
 

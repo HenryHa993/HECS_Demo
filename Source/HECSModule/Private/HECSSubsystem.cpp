@@ -12,6 +12,10 @@ void UHECSSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 
 void UHECSSubsystem::Deinitialize()
 {
+	if(ECSWorld)
+	{
+		delete ECSWorld;
+	}
 	Super::Deinitialize();
 }
 
