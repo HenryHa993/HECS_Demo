@@ -27,7 +27,7 @@ void ASystemsManager::BeginPlay()
 // Called every frame
 void ASystemsManager::Tick(float DeltaTime)
 {
-	DimSystem(DeltaTime);
+	/*DimSystem(DeltaTime);
 	CosXSystem(DeltaTime);
 	CosYSystem(DeltaTime);
 	CosZSystem(DeltaTime);
@@ -36,7 +36,7 @@ void ASystemsManager::Tick(float DeltaTime)
 	SinZSystem(DeltaTime);
 	LinearXSystem(DeltaTime);
 	LinearYSystem(DeltaTime);
-	LinearZSystem(DeltaTime);
+	LinearZSystem(DeltaTime);*/
 	Super::Tick(DeltaTime);
 }
 

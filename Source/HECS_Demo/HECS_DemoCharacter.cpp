@@ -1,6 +1,9 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "HECS_DemoCharacter.h"
+
+#include "ComponentEntryData.h"
+#include "ComponentsModule.h"
 #include "HECS_DemoProjectile.h"
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
@@ -34,7 +37,15 @@ AHECS_DemoCharacter::AHECS_DemoCharacter()
 	Mesh1P->bCastDynamicShadow = false;
 	Mesh1P->CastShadow = false;
 	Mesh1P->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
+}
 
+void AHECS_DemoCharacter::BeginPlay()
+{
+	UGameInstance* gameInstance = UGameplayStatics::GetGameInstance(GetWorld());
+	UHECSSubsystem* hecsSubsystem = gameInstance->GetSubsystem<UHECSSubsystem>();
+	ECSWorld = hecsSubsystem->GetECSWorld();
+
+	Super::BeginPlay();
 }
 
 //////////////////////////////////////////////////////////////////////////// Input
@@ -72,6 +83,19 @@ void AHECS_DemoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	{
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input Component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
+}
+
+void AHECS_DemoCharacter::UpdateEntityInfo()
+{
+	TArray<UComponentEntryData*> data;
+
+	if(ECSWorld->Has<StaticMeshComponent>(FocusEntity))
+	{
+		UComponentEntryData* entryData = NewObject<UComponentEntryData>();
+		entryData->ComponentLabel = FText::FromString(TEXT("Actor"));
+		data.Add(entryData);
+	}
+	EntityWidget->ComponentList->SetListItems(data);
 }
 
 

@@ -4,7 +4,7 @@
 
 #include "ComponentsModule.h"
 #include "HECSSubsystem.h"
-#include "TestEntity.h"
+#include "EntityBase.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -41,7 +41,7 @@ void AHECS_DemoProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActo
 	// Only add impulse and destroy projectile if we hit a physics
 	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr))
 	{
-		ATestEntity* entity = Cast<ATestEntity>(OtherActor);
+		AEntityBase* entity = Cast<AEntityBase>(OtherActor);
 		if(entity == nullptr)
 		{
 			return;

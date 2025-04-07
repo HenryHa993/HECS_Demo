@@ -3,7 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EntityInfoWidget.h"
+#include "HECS.h"
+#include "HECSSubsystem.h"
 #include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
 #include "Logging/LogMacros.h"
 #include "HECS_DemoCharacter.generated.h"
 
@@ -45,8 +49,20 @@ class AHECS_DemoCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
 	
+	HECS::World* ECSWorld;
+	
+public:
+	UPROPERTY(BlueprintReadWrite)
+	UEntityInfoWidget* EntityWidget;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int FocusEntity = 0;
+	
 public:
 	AHECS_DemoCharacter();
+
+protected:
+	virtual void BeginPlay() override;
 
 protected:
 	/** Called for movement input */
@@ -62,10 +78,15 @@ protected:
 	// End of APawn interface
 
 public:
+	UFUNCTION(BlueprintCallable)
+	void UpdateEntityInfo();
+
+public:
 	/** Returns Mesh1P subobject **/
 	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
+	
 };
 

@@ -6,16 +6,16 @@
 #include "HECS.h"
 #include "Components/PointLightComponent.h"
 #include "GameFramework/Actor.h"
-#include "TestEntity.generated.h"
+#include "EntityBase.generated.h"
 
 UCLASS()
-class HECS_DEMO_API ATestEntity : public AActor
+class HECS_DEMO_API AEntityBase : public AActor
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this actor's properties
-	ATestEntity();
+	AEntityBase();
 
 protected:
 	// Called when the game starts or when spawned
@@ -31,13 +31,11 @@ public:
 	UStaticMeshComponent* StaticMesh;
 
 	UPROPERTY(EditAnywhere)
-	UPointLightComponent* Pointlight;
-
-	UPROPERTY(EditAnywhere)
 	float Radius = 100;
 
 	UPROPERTY(EditAnywhere)
 	float Speed = 100;
-	
-	unsigned EntityID;
+
+	UPROPERTY(BlueprintReadOnly)
+	int EntityID;
 };
