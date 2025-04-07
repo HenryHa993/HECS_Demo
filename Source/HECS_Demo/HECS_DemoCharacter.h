@@ -78,9 +78,48 @@ protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 	// End of APawn interface
 
+private:
+	template <class T>
+	void AddOrRemove(unsigned entity, T value = T())
+	{
+		if(ECSWorld->Has<T>(entity))
+		{
+			ECSWorld->Remove<T>(entity);
+			return;
+		}
+		ECSWorld->Add<T>(entity, value);
+	}
+
 public:
 	UFUNCTION(BlueprintCallable)
 	void UpdateEntityInfo();
+
+	UFUNCTION(BlueprintCallable)
+	void AddOrRemoveCosX();
+
+	UFUNCTION(BlueprintCallable)
+	void AddOrRemoveCosY();
+
+	UFUNCTION(BlueprintCallable)
+	void AddOrRemoveCosZ();
+
+	UFUNCTION(BlueprintCallable)
+	void AddOrRemoveSinX();
+
+	UFUNCTION(BlueprintCallable)
+	void AddOrRemoveSinY();
+
+	UFUNCTION(BlueprintCallable)
+	void AddOrRemoveSinZ();
+
+	UFUNCTION(BlueprintCallable)
+	void AddOrRemoveLinearX();
+
+	UFUNCTION(BlueprintCallable)
+	void AddOrRemoveLinearY();
+
+	UFUNCTION(BlueprintCallable)
+	void AddOrRemoveLinearZ();
 
 public:
 	/** Returns Mesh1P subobject **/

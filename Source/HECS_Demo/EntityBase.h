@@ -21,7 +21,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
-	virtual void Initialise(HECS::World* ecs);
+	virtual void Initialise();
+
+protected:
+	HECS::World* ECS;
 
 public:
 	UPROPERTY(EditAnywhere)

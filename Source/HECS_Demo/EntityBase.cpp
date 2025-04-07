@@ -26,17 +26,18 @@ void AEntityBase::BeginPlay()
 
 	UGameInstance* gameInstance = UGameplayStatics::GetGameInstance(GetWorld());
 	UHECSSubsystem* hecsSubsystem = gameInstance->GetSubsystem<UHECSSubsystem>();
-	Initialise(hecsSubsystem->GetECSWorld());
+	ECS = hecsSubsystem->GetECSWorld();
+	GetWorld()->GetTimerManager().SetTimerForNextTick(this, &AEntityBase::Initialise);
 }
 
-void AEntityBase::Initialise(HECS::World* ecs)
+void AEntityBase::Initialise()
 {
-	EntityID = ecs->Entity();
+	EntityID = ECS->Entity();
 	UE_LOG(LogTemp, Warning, TEXT("Entity created with ID %u"), EntityID)
-	if(ecs == nullptr) return;
-	ecs->Add<StaticMeshComponent>(EntityID,{StaticMesh});
-	ecs->Add<CosX>(EntityID, {Radius});
-	ecs->Add<CosY>(EntityID, {Radius});
+	if(ECS == nullptr) return;
+	ECS->Add<StaticMeshComponent>(EntityID,{StaticMesh});
+	ECS->Add<CosX>(EntityID, {Radius});
+	ECS->Add<CosY>(EntityID, {Radius});
 }
 
 
