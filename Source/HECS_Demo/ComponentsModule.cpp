@@ -7,10 +7,6 @@ void UComponentsModule::Initialise(HECS::World* ecs)
 {
 	ecs->Register<Actor>();
 	ecs->Register<StaticMeshComponent>();
-	ecs->Register<Light>();
-	ecs->Register<OscillateLight>();
-	ecs->Register<SpinLight>();
-	ecs->Register<Dim>();
 	ecs->Register<CosX>();
 	ecs->Register<CosY>();
 	ecs->Register<CosZ>();

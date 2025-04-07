@@ -46,16 +46,17 @@ namespace HECS
 	public:
 		ComponentPool()
 		{
-			// Initialise sparse array
-			for (unsigned i = 0; i < MAX_ENTITIES; i++)
+			for(int i = 0; i < MAX_ENTITIES; i++)
 			{
 				SparseArray[i] = UINT_MAX;
+				EntityPackedArray[i] = UINT_MAX;
 			}
 		};
 
 		// Check if component pool contains a component of a given entity
 		bool Has(unsigned entity) override
 		{
+			if(entity > MAX_ENTITIES) return false;
 			return
 				SparseArray[entity] != UINT_MAX
 				&&

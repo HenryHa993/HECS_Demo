@@ -30,7 +30,8 @@ AHECS_DemoProjectile::AHECS_DemoProjectile()
 	ProjectileMovement->InitialSpeed = 3000.f;
 	ProjectileMovement->MaxSpeed = 3000.f;
 	ProjectileMovement->bRotationFollowsVelocity = true;
-	ProjectileMovement->bShouldBounce = true;
+	ProjectileMovement->bShouldBounce = false;
+	ProjectileMovement->ProjectileGravityScale = 0;
 
 	// Die after 3 seconds by default
 	InitialLifeSpan = 3.0f;
@@ -44,11 +45,13 @@ void AHECS_DemoProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActo
 		AEntityBase* entity = Cast<AEntityBase>(OtherActor);
 		if(entity == nullptr)
 		{
+			Destroy();
 			return;
 		}
 		UGameInstance* gameInstance = UGameplayStatics::GetGameInstance(GetWorld());
 		UHECSSubsystem* hecsSubsystem = gameInstance->GetSubsystem<UHECSSubsystem>();
 		HECS::World* ecs = hecsSubsystem->GetECSWorld();
-		ecs->Add<Dim>(entity->EntityID);
+		//ecs->Add<Dim>(entity->EntityID);
+		Destroy();
 	}
 }

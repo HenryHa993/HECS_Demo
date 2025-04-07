@@ -87,14 +87,22 @@ void AHECS_DemoCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 
 void AHECS_DemoCharacter::UpdateEntityInfo()
 {
-	TArray<UComponentEntryData*> data;
+	if(FocusEntity == nullptr)
+	{
+		return;
+	}
 
-	if(ECSWorld->Has<StaticMeshComponent>(FocusEntity))
+	TArray<UComponentEntryData*> data;
+	int entityID = FocusEntity->EntityID;
+	
+	if(ECSWorld->Has<StaticMeshComponent>(entityID))
 	{
 		UComponentEntryData* entryData = NewObject<UComponentEntryData>();
 		entryData->ComponentLabel = FText::FromString(TEXT("Actor"));
 		data.Add(entryData);
 	}
+	
+	EntityWidget->EntityNum->SetText(FText::AsNumber(entityID));
 	EntityWidget->ComponentList->SetListItems(data);
 }
 

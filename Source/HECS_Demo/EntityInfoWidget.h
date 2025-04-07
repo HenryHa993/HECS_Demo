@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/ListView.h"
+#include "Components/TextBlock.h"
 #include "EntityInfoWidget.generated.h"
 
 /**
@@ -16,6 +17,9 @@ class HECS_DEMO_API UEntityInfoWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(BindWidget))
+	TObjectPtr<UTextBlock> EntityNum;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta=(BindWidget))
 	TObjectPtr<UListView> ComponentList;
 };

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EntityBase.h"
 #include "EntityInfoWidget.h"
 #include "HECS.h"
 #include "HECSSubsystem.h"
@@ -56,7 +57,7 @@ public:
 	UEntityInfoWidget* EntityWidget;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	int FocusEntity = 0;
+	AEntityBase* FocusEntity = nullptr;
 	
 public:
 	AHECS_DemoCharacter();

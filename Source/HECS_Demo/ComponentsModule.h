@@ -7,9 +7,6 @@
 #include "Components/PointLightComponent.h"
 #include "ComponentsModule.generated.h"
 
-/*struct Test0{};
-struct Test1{};
-struct Test2{};*/
 struct Actor
 {
 	AActor* Value;
@@ -19,17 +16,6 @@ struct StaticMeshComponent
 {
 	UStaticMeshComponent* Value;
 };
-
-struct Light
-{
-	UPointLightComponent* Value;
-};
-
-struct OscillateLight{};
-
-struct SpinLight{};
-
-struct Dim{};
 
 struct CosX
 {

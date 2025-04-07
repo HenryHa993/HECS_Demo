@@ -22,6 +22,8 @@ AEntityBase::AEntityBase()
 // Called when the game starts or when spawned
 void AEntityBase::BeginPlay()
 {
+	Super::BeginPlay();
+
 	UGameInstance* gameInstance = UGameplayStatics::GetGameInstance(GetWorld());
 	UHECSSubsystem* hecsSubsystem = gameInstance->GetSubsystem<UHECSSubsystem>();
 	Initialise(hecsSubsystem->GetECSWorld());
@@ -31,7 +33,10 @@ void AEntityBase::Initialise(HECS::World* ecs)
 {
 	EntityID = ecs->Entity();
 	UE_LOG(LogTemp, Warning, TEXT("Entity created with ID %u"), EntityID)
+	if(ecs == nullptr) return;
 	ecs->Add<StaticMeshComponent>(EntityID,{StaticMesh});
+	ecs->Add<CosX>(EntityID, {Radius});
+	ecs->Add<CosY>(EntityID, {Radius});
 }
 
 
