@@ -147,21 +147,21 @@ void AHECS_DemoCharacter::UpdateEntityInfo()
 	if (ECSWorld->Has<LinearX>(entityID))
 	{
 	    UComponentEntryData* entryData = NewObject<UComponentEntryData>();
-	    entryData->ComponentLabel = FText::FromString(TEXT("LinearX"));
+	    entryData->ComponentLabel = FText::FromString(TEXT("RotateX"));
 	    data.Add(entryData);
 	}
 
 	if (ECSWorld->Has<LinearY>(entityID))
 	{
 	    UComponentEntryData* entryData = NewObject<UComponentEntryData>();
-	    entryData->ComponentLabel = FText::FromString(TEXT("LinearY"));
+	    entryData->ComponentLabel = FText::FromString(TEXT("RotateY"));
 	    data.Add(entryData);
 	}
 
 	if (ECSWorld->Has<LinearZ>(entityID))
 	{
 	    UComponentEntryData* entryData = NewObject<UComponentEntryData>();
-	    entryData->ComponentLabel = FText::FromString(TEXT("LinearZ"));
+	    entryData->ComponentLabel = FText::FromString(TEXT("RotateZ"));
 	    data.Add(entryData);
 	}
 		
@@ -174,7 +174,6 @@ void AHECS_DemoCharacter::AddOrRemoveCosX()
 	if(FocusEntity == nullptr) return;
 	int entityID = FocusEntity->EntityID;
 	AddOrRemove<CosX>(entityID, {FocusEntity->Radius});
-	UpdateEntityInfo();
 }
 
 void AHECS_DemoCharacter::AddOrRemoveCosY()
@@ -182,7 +181,6 @@ void AHECS_DemoCharacter::AddOrRemoveCosY()
 	if (FocusEntity == nullptr) return;
 	int entityID = FocusEntity->EntityID;
 	AddOrRemove<CosY>(entityID, {FocusEntity->Radius});
-	UpdateEntityInfo();
 }
 
 void AHECS_DemoCharacter::AddOrRemoveCosZ()
@@ -190,7 +188,6 @@ void AHECS_DemoCharacter::AddOrRemoveCosZ()
 	if (FocusEntity == nullptr) return;
 	int entityID = FocusEntity->EntityID;
 	AddOrRemove<CosZ>(entityID, {FocusEntity->Radius});
-	UpdateEntityInfo();
 }
 
 void AHECS_DemoCharacter::AddOrRemoveSinX()
@@ -198,7 +195,6 @@ void AHECS_DemoCharacter::AddOrRemoveSinX()
 	if (FocusEntity == nullptr) return;
 	int entityID = FocusEntity->EntityID;
 	AddOrRemove<SinX>(entityID, {FocusEntity->Radius});
-	UpdateEntityInfo();
 }
 
 void AHECS_DemoCharacter::AddOrRemoveSinY()
@@ -206,7 +202,6 @@ void AHECS_DemoCharacter::AddOrRemoveSinY()
 	if (FocusEntity == nullptr) return;
 	int entityID = FocusEntity->EntityID;
 	AddOrRemove<SinY>(entityID, {FocusEntity->Radius});
-	UpdateEntityInfo();
 }
 
 void AHECS_DemoCharacter::AddOrRemoveSinZ()
@@ -214,7 +209,6 @@ void AHECS_DemoCharacter::AddOrRemoveSinZ()
 	if (FocusEntity == nullptr) return;
 	int entityID = FocusEntity->EntityID;
 	AddOrRemove<SinZ>(entityID, {FocusEntity->Radius});
-	UpdateEntityInfo();
 }
 
 void AHECS_DemoCharacter::AddOrRemoveLinearX()
@@ -222,7 +216,6 @@ void AHECS_DemoCharacter::AddOrRemoveLinearX()
 	if (FocusEntity == nullptr) return;
 	int entityID = FocusEntity->EntityID;
 	AddOrRemove<LinearX>(entityID, {FocusEntity->Radius});
-	UpdateEntityInfo();
 }
 
 void AHECS_DemoCharacter::AddOrRemoveLinearY()
@@ -230,7 +223,6 @@ void AHECS_DemoCharacter::AddOrRemoveLinearY()
 	if (FocusEntity == nullptr) return;
 	int entityID = FocusEntity->EntityID;
 	AddOrRemove<LinearY>(entityID, {FocusEntity->Radius});
-	UpdateEntityInfo();
 }
 
 void AHECS_DemoCharacter::AddOrRemoveLinearZ()
@@ -238,7 +230,6 @@ void AHECS_DemoCharacter::AddOrRemoveLinearZ()
 	if (FocusEntity == nullptr) return;
 	int entityID = FocusEntity->EntityID;
 	AddOrRemove<LinearZ>(entityID, {FocusEntity->Radius});
-	UpdateEntityInfo();
 }
 
 void AHECS_DemoCharacter::Move(const FInputActionValue& Value)

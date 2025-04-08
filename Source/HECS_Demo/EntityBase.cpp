@@ -36,8 +36,8 @@ void AEntityBase::Initialise()
 	UE_LOG(LogTemp, Warning, TEXT("Entity created with ID %u"), EntityID)
 	if(ECS == nullptr) return;
 	ECS->Add<StaticMeshComponent>(EntityID,{StaticMesh});
-	ECS->Add<CosX>(EntityID, {Radius});
-	ECS->Add<CosY>(EntityID, {Radius});
+	ECS->Add<LinearZ>(EntityID, {Radius});
+	//ECS->Add<CosY>(EntityID, {Radius});
 }
 
 

@@ -139,15 +139,11 @@ void ASystemsManager::LinearXSystem(float deltaTime) {
         UStaticMeshComponent* mesh = meshType.Value;
         float distance = xType.Distance;
 
-        float x = FMath::Sin(GetWorld()->GetTimeSeconds()) * distance;
-
-        FVector newLocation = mesh->GetRelativeLocation();
-        newLocation.X = x;
-
-        mesh->SetRelativeLocation(newLocation);
+        mesh->AddRelativeRotation(FRotator(0, 0, deltaTime * distance));
     }
 }
 
+// Pitch rotations have an issue with it.
 void ASystemsManager::LinearYSystem(float deltaTime) {
     for (unsigned entity : HECS::View<StaticMeshComponent, LinearY>(ECS)) {
         StaticMeshComponent& meshType = ECS->Get<StaticMeshComponent>(entity);
@@ -156,12 +152,12 @@ void ASystemsManager::LinearYSystem(float deltaTime) {
         UStaticMeshComponent* mesh = meshType.Value;
         float distance = yType.Distance;
 
-        float y = FMath::Sin(GetWorld()->GetTimeSeconds()) * distance;
-
-        FVector newLocation = mesh->GetRelativeLocation();
-        newLocation.Y = y;
-
-        mesh->SetRelativeLocation(newLocation);
+        if(mesh->GetRelativeRotation().Pitch > 87)
+        {
+            mesh->AddRelativeRotation(FRotator(0, -87, 0));
+            return;
+        }
+        mesh->AddRelativeRotation(FRotator(deltaTime * distance, 0, 0));
     }
 }
 
@@ -173,11 +169,7 @@ void ASystemsManager::LinearZSystem(float deltaTime) {
         UStaticMeshComponent* mesh = meshType.Value;
         float distance = zType.Distance;
 
-        float z = FMath::Sin(GetWorld()->GetTimeSeconds()) * distance;
+        mesh->AddRelativeRotation(FRotator(0, deltaTime * distance, 0));
 
-        FVector newLocation = mesh->GetRelativeLocation();
-        newLocation.Z = z;
-
-        mesh->SetRelativeLocation(newLocation);
     }
 }

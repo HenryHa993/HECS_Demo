@@ -88,6 +88,7 @@ private:
 			return;
 		}
 		ECSWorld->Add<T>(entity, value);
+		UpdateEntityInfo();
 	}
 
 public:
